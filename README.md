@@ -1,4 +1,4 @@
-# cache_dns_server
+# CacheDNS
 Пример запуска в cmd: python server.py
 
 Чтобы остановить процесс, в терминале Ctrl + C.
