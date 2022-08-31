@@ -3,12 +3,12 @@ from socket import socket, AF_INET, SOCK_DGRAM, timeout
 from dnslib import DNSRecord
 from cache import Cache
 
-ROOT_SERVER = "8.8.8.8",  # Google Public DNS
-CACHE_FILE = "cache.txt"
+ROOT_SERVER = '8.8.8.8'
+CACHE_FILE = 'cache.txt'
 
 
 class Server:
-    def __init__(self, cache, host_ip="localhost", port=53):
+    def __init__(self, cache, host_ip='127.0.0.1', port=53):
         self.server = socket(AF_INET, SOCK_DGRAM)
         self.server.settimeout(2)
         self.server.bind((host_ip, port))
