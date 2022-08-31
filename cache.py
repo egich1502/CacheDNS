@@ -30,15 +30,21 @@ class Cache:
 
     def add_records(self, records):
         for record in records:
-            self.cache[record.rtype][str(record.rname)] = (str(record.rdata), time.time(), record.ttl)
+            try:
+                self.cache[record.rtype][str(record.rname)] = (str(record.rdata), time.time(), record.ttl)
+            except KeyError:
+                continue
 
     def remove_old_records(self):
         for q_type in self.cache:
-            for q_name in self.cache[q_type]:
-                time_record_created = self.cache[q_type][q_name][1]
-                ttl = self.cache[q_type][q_name][2]
-                if time.time() - time_record_created > ttl:
-                    del self.cache[q_type][q_name]
+            try:
+                for q_name in self.cache[q_type]:
+                    time_record_created = self.cache[q_type][q_name][1]
+                    ttl = self.cache[q_type][q_name][2]
+                    if time.time() - time_record_created > ttl:
+                        del self.cache[q_type][q_name]
+            except RuntimeError:
+                continue
         self.TIME_CACHE_CLEANED = time.time()
 
     def save_cache(self, cache_file_name):
