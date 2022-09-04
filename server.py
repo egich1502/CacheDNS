@@ -3,7 +3,7 @@ from socket import socket, AF_INET, SOCK_DGRAM, timeout
 from dnslib import DNSRecord
 from cache import Cache
 
-ROOT_SERVER = '8.8.8.8'
+ROOT_SERVER = '192.5.5.241'
 CACHE_FILE = 'cache.txt'
 
 
@@ -27,7 +27,7 @@ class Server:
 
     def get_packet(self):
         try:
-            return self.server.recvfrom(256)
+            return self.server.recvfrom(512)
         except timeout:
             return self.get_packet()
         except Exception as e:
@@ -53,6 +53,7 @@ class Server:
             if response.header.rcode == 3:
                 return byte_response
             self.cache.add_records(response.ar)
+            self.cache.add_records(response.auth)
             ip = next((str(x.rdata) for x in response.ar if x.rtype == 1), -1)
             if ip == -1 and len(response.rr) == 0:
                 resp = self.handle_packet(DNSRecord.question(str(response.auth[0].rdata)).pack())
